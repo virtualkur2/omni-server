@@ -1,0 +1,38 @@
+{
+  "name": "omnisys-auth-server",
+  "version": "1.0.0",
+  "description": "Auth Server for OmniServices",
+  "engines": {
+    "node": "11.x"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "auth",
+    "authentication",
+    "server"
+  ],
+  "author": "Mauricio Contreras Canepa",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "express": "^4.16.4",
+    "helmet": "^3.15.1",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.4.12"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/preset-env": "^7.3.1",
+    "babel-loader": "^8.0.5",
+    "console-stamp": "^0.2.7",
+    "file-loader": "^3.0.1"
+  }
+}
