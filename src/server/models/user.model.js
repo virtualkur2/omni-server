@@ -112,3 +112,34 @@ UserSchema.methods = {
     }
   }
 }
+
+// Validation for the password field
+UserSchema.path('hashed_password').validate(function(v)	{
+	if	(this._password	&&	this._password.length	<	config.passLength) {
+    this.invalidate('password',	`Password must have at least ${config.passLength} characters`);
+	}
+}, null);
+
+// Create hashed password and store it in the user profile before
+// validation, so the validation could do it's job correctly.
+// Since encryptPassword() is an async function it will be handled
+// with async / await.
+UserSchema.pre('validate', async function(next) {
+  const user = this;
+  if (!user.isNew && !user.isModified('hashed_password')) { // check if neccessary to rehash the password
+    next();
+  } else {
+    const password = user.password;
+    try {
+      user.hashed_password = await user.encryptPassword(password);
+      next();
+      }
+    catch(err) {
+      console.log(`Error hashing password for user: ${user.email}`);
+      err.httpStatusCode = 500;
+      next(err);
+      }
+    }
+  });
+
+export default mongoose.model('User', UserSchema);
