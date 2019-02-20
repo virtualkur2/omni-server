@@ -12,7 +12,7 @@ const signin = (req, res, next) => {
     if (!user) {
       const err = new Error('User not found');
       err.httpStatusCode = 401;
-      return next(err);
+      next(err);
     }
     try {
       const _user = await user.authenticate(req.body.password);
