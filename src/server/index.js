@@ -1,12 +1,13 @@
 // SERVER index.js
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import path from 'path';
-
-//import routes from './routes';
+//import path from 'path';
+import config from '../config';
+import routes from './routes';
 
 const router = express.Router();
-
+cookieParser(config.cookieSecret);
 const server = () => {
   const app = express();
   app.use(helmet());
@@ -14,7 +15,8 @@ const server = () => {
   app.use(express.urlencoded({
     extended: true
   }));
-  //app.use(routes(router));
+  app.use(cookieParser());
+  app.use(routes(router));
   return app;
 }
 
