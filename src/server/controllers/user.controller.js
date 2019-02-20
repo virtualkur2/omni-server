@@ -34,7 +34,21 @@ const remove = (req, res, next) => {
   });
 }
 
-const userById = (req, res, next) => {}
+const userById = (req, res, next, id) => {
+  User.findById(id).exec((err, user) => {
+    if(err) {
+      err.httpStatusCode = 500;
+      next(err);
+    }
+    if(!user) {
+      const err = new Error('User not found');
+      err.httpStatusCode = 401;
+      next(err);
+    }
+    req.profile = user;
+    next();
+  });
+}
 
 const userSave = (err, result) => {
   if (err) {
@@ -46,4 +60,4 @@ const userSave = (err, result) => {
   });
 }
 
-export default { create, read, update, remove }
+export default { create, read, update, remove, userById }
