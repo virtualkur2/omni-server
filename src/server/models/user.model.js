@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 import config from '../../config';
 
-const userSchema = new mongooseSchema({
+const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
