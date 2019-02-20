@@ -28,7 +28,7 @@ const signin = (req, res, next) => {
       }
       const tokenExpiresIn = Math.floor((Date.now() + config.sessionExpireTime) / 1000); // this is seconds
       const token = jwt.sign({ _id: user._id, exp: tokenExpiresIn }, config.jwtSecret);
-      res.cookie(config.cookieName, token, {maxAge: config.sessionExpireTime});
+      res.cookie(config.cookieName, token, config.cookieOptions);
       return res.status(200).json({
         token,
         user: {
@@ -54,4 +54,48 @@ const signout = (req, res, next) => {
   });
 }
 
-export default { signin, signout }
+const requireSignin = (req, res, next) => {
+  const token = getToken(req);
+  if(!token) {
+    const error = new Error('Missing credentials, please login.');
+    error.httpStatusCode = 401;
+    next(error);
+  }
+  const tokenMaxAge = config.sessionExpireTime / 1000; // this is seconds
+  jwt.verify(token, config.jwtSecret, {maxAge: tokenMaxAge}, (err, decoded) => {
+    if (err) {
+      err.httpStatusCode = 500;
+      next(err);
+    }
+    req.auth = decoded;
+    next();
+  });
+}
+
+const hasAuthorization = (req, res, next) => {
+  const authorized = req.profile && req.auth && (req.profile._id == req.auth._id);
+  if (!authorized) {
+    const error = new Error('User not authorized');
+    error.httpStatusCode = 401;
+    next(error);
+  }
+  next();
+}
+
+
+// implements 3 ways of extracting token: by 'bearer' header, by req.query and by cookie token.
+const getToken = (req) => {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    return req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    return req.query.token;
+  // the next line will be implemented later
+  // } else if (req.signedCookies && res.signedCookies[config.cookieName]) {
+  //   return res.signedCookies[config.cookieName].token;
+  } else {
+    console.log('signedCookies: ', req.signedCookies);
+    return null;
+  }
+}
+
+export default { signin, signout, requireSignin, hasAuthorization }
