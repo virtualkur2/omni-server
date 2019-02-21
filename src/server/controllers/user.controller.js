@@ -42,7 +42,7 @@ const userById = (req, res, next, id) => {
     }
     if(!user) {
       const err = new Error('User not found');
-      err.httpStatusCode = 401;
+      err.httpStatusCode = 404;
       next(err);
     }
     req.profile = user;
@@ -55,8 +55,8 @@ const userSave = (err, result) => {
     err.httpStatusCode = 500;
     next(err);
   }
-  return res.status(200).json({
-    message: user.updated ? 'Successfully updated.' : 'Successfully signed up'
+  return res.status(201).json({
+    message: result.updated ? 'Successfully updated.' : 'Successfully signed up'
   });
 }
 
