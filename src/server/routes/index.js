@@ -3,6 +3,7 @@ import users from './users';
 
 const routes = (router) => {
   auth(router);
+  users(router);
   return router;
 }
 

@@ -1,5 +1,5 @@
 // ROUTES: USERS index.js
-import authCrl from '../../controllers/auth.controller';
+import authCtrl from '../../controllers/auth.controller';
 import usrCtrl from '../../controllers/user.controller';
 
 const users = (router) => {
@@ -9,7 +9,7 @@ const users = (router) => {
   router.route('/api/users/:userId')
     .get(authCtrl.requireSignin, authCtrl.hasAuthorization, usrCtrl.read)
     .put(authCtrl.requireSignin, authCtrl.hasAuthorization, usrCtrl.update)
-    .delete(auhtCtrl.requireSignin, authCrl.hasAuthorization, usrCtrl.remove);
+    .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, usrCtrl.remove);
 
   router.param('userId', usrCtrl.userById);
 
