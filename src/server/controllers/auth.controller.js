@@ -11,7 +11,7 @@ const signin = (req, res, next) => {
     }
     if (!user) {
       const err = new Error('User not found');
-      err.httpStatusCode = 401;
+      err.httpStatusCode = 404;
       next(err);
     }
     try {
@@ -23,7 +23,7 @@ const signin = (req, res, next) => {
       }
       if (!_user.isActive) {
         const err = new Error('Inactive user. Contact an administrator.');
-        err.httpStatusCode = 401;
+        err.httpStatusCode = 403;
         next(err);
       }
       const tokenExpiresIn = Math.floor((Date.now() + config.sessionExpireTime) / 1000); // this is seconds
