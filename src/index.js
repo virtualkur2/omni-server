@@ -3,14 +3,14 @@ import * as Domain from 'domain';
 
 import config from './config';
 import server from './server/';
-import dbConnection from './server/helpers/';
+import dbHelper from './server/helpers/db-connection.helper';
 
 const d = Domain.create();
 
 d.run(() => {
   const app = server();
   console.info('Starting app...');
-  dbConnection.connect()
+  dbHelper.connect()
     .then(() => {
       console.info('===> Starting server...');
       app.listen(config.port, (err) => {
@@ -36,7 +36,7 @@ d.on('error', (err) => {
 
 process.on('beforeExit', () => {
   console.log('Preparing for close app...');
-  dbConnection.disconnect()
+  dbHelper.disconnect()
     .then(() => {
       console.info('...');
     })
@@ -54,7 +54,7 @@ process.on('exit', (exitCode) => {
 
 process.on('SIGINT', () => {
   console.info('\n===> <ctrl+c> detected');
-  dbConnection.disconnect()
+  dbHelper.disconnect()
     .then(() => {
       console.info('...');
     })
