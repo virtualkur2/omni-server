@@ -5,6 +5,7 @@ import helmet from 'helmet';
 //import path from 'path';
 import config from '../config';
 import routes from './routes';
+import errorHandler from './helpers/error-handler.helper';
 
 const router = express.Router();
 cookieParser(config.cookieSecret);
@@ -17,6 +18,7 @@ const server = () => {
   }));
   app.use(cookieParser());
   app.use(routes(router));
+  app.use(errorHandler);
   return app;
 }
 
