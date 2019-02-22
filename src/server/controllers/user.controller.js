@@ -4,10 +4,17 @@ import User from '../models/user.model';
 
 const create = (req, res, next) => {
   const user = new User(req.body);
-  user.save(userSave);
+  user.save((err, result) => {
+    if (err) {
+      return next(err);
+    }
+    return res.status(201).json({
+      message: 'Successfully signed up'
+    });
+  });
 }
 
-const read = (req, res, next) => {
+const read = (next) => {
   // hide sensitive data before send to client
   req.profile.hashed_password = undefined;
   req.profile.pepper = undefined;
@@ -18,15 +25,21 @@ const update = (req, res, next) => {
   let user = req.profile;
   user = _.extend(user, req.body);
   user.updated = Date.now();
-  user.save(userSave);
+  user.save((err, result) => {
+    if (err) {
+      return next(err);
+    }
+    return res.status(201).json({
+      message: 'Successfully updated'
+    });
+  });
 }
 
 const remove = (req, res, next) => {
   let user = req.profile;
   user.remove((err, deletedUser) => {
     if (err) {
-      err.httpStatusCode = 500;
-      next(err);
+      return next(err);
     }
     return res.status(200).json({
       message: 'Succesfully deleted'
@@ -37,26 +50,15 @@ const remove = (req, res, next) => {
 const userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if(err) {
-      err.httpStatusCode = 500;
-      next(err);
+      return next(err);
     }
     if(!user) {
       const err = new Error('User not found');
       err.httpStatusCode = 404;
-      next(err);
+      return next(err);
     }
     req.profile = user;
     next();
-  });
-}
-
-const userSave = (err, result) => {
-  if (err) {
-    err.httpStatusCode = 500;
-    next(err);
-  }
-  return res.status(201).json({
-    message: result.updated ? 'Successfully updated.' : 'Successfully signed up'
   });
 }
 
