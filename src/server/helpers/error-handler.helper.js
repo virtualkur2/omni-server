@@ -54,6 +54,11 @@ const errorHandler = (err, req, res, next) => {
 
       }
 
+    case 'TokenExpiredError':
+      name = err.name;
+      httpStatusCode = 500;
+      message = 'Session expired';
+      break;
     case 'EvalError':
 
     case 'RangeError':
