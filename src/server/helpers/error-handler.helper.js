@@ -49,16 +49,19 @@ const errorHandler = (err, req, res, next) => {
             break;
           default:
             name = 'DefaultError';
+            break;
         }
       } else {
-
+        httpStatusCode = 500;
+        name = 'UnkownError';
       }
-
+      break;
     case 'TokenExpiredError':
       name = err.name;
       httpStatusCode = 500;
       message = 'Session expired';
       break;
+
     case 'EvalError':
 
     case 'RangeError':
