@@ -12,19 +12,19 @@ const signin = (req, res, next) => {
     if (!user) {
       const err = new Error('User not found');
       err.httpStatusCode = 404;
-      next(err);
+      return next(err);
     }
     try {
       const _user = await user.authenticate(req.body.password);
       if (!_user.isAuthenticated) {
         const err = new Error('User and password don\'t match');
         err.httpStatusCode = 401;
-        next(err);
+        return next(err);
       }
       if (!_user.isActive) {
         const err = new Error('Inactive user. Contact an administrator.');
         err.httpStatusCode = 403;
-        next(err);
+        return next(err);
       }
       const tokenExpiresIn = Math.floor((Date.now() + config.sessionExpireTime) / 1000); // this is seconds
       const token = jwt.sign({ _id: user._id, exp: tokenExpiresIn }, config.jwtSecret);
@@ -42,7 +42,7 @@ const signin = (req, res, next) => {
     }
     catch (e) {
       e.httpStatusCode = 500;
-      next(e);
+      return next(e);
     }
   });
 }
@@ -59,13 +59,13 @@ const requireSignin = (req, res, next) => {
   if(!token) {
     const error = new Error('Missing credentials, please login.');
     error.httpStatusCode = 401;
-    next(error);
+    return next(error);
   }
   const tokenMaxAge = config.sessionExpireTime / 1000; // this is seconds
   jwt.verify(token, config.jwtSecret, {maxAge: tokenMaxAge}, (err, decoded) => {
     if (err) {
       err.httpStatusCode = 500;
-      next(err);
+      return next(err);
     }
     req.auth = decoded;
     next();
@@ -77,7 +77,7 @@ const hasAuthorization = (req, res, next) => {
   if (!authorized) {
     const error = new Error('User not authorized');
     error.httpStatusCode = 401;
-    next(error);
+    return next(error);
   }
   next();
 }

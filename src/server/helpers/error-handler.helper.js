@@ -23,7 +23,7 @@ const errorHandler = (err, req, res, next) => {
       break;
 
     case 'MongoError':
-      //All MongoError object has a code
+      //All MongoError object has a code ???
       switch (err.code) {
         //codes 11000 and 11001 are about Unique Constraints
         case 11000:
@@ -34,6 +34,25 @@ const errorHandler = (err, req, res, next) => {
       }
 
       break;
+
+    case 'Error':
+      message = err.message;
+      if (err.httpStatusCode) {
+        httpStatusCode = err.httpStatusCode;
+        switch (httpStatusCode) {
+          case 401:
+          case 403:
+            name = 'AuthorizationError';
+            break;
+          case 404:
+            name = 'NotFoundError';
+            break;
+          default:
+            name = 'DefaultError';
+        }
+      } else {
+
+      }
 
     case 'EvalError':
 
@@ -49,13 +68,14 @@ const errorHandler = (err, req, res, next) => {
 
     default:
   }
-  console.log('Mensajes error original:');
-  console.log('========================')
-  console.log('Tipo de error: ', err.constructor.name);
-  console.log('Codigo de error: ', err.code);
-  console.log('Nombre de error: ', err.name);
-  console.log('httpStatusCode: ', err.httpStatusCode);
-  console.log('Mensaje: ', err.message);
+
+  // console.log('Mensajes error original:');
+  // console.log('========================')
+  // console.log('Tipo de error: ', err.constructor.name);
+  // console.log('Codigo de error: ', err.code);
+  // console.log('Nombre de error: ', err.name);
+  // console.log('httpStatusCode: ', err.httpStatusCode);
+  // console.log('Mensaje: ', err.message);
 
   const error = {
     error: name,
@@ -63,11 +83,11 @@ const errorHandler = (err, req, res, next) => {
     message: message
   }
 
-  console.log('\nMensajes error al cliente:');
-  console.log('========================')
-  console.log('error: ', error.error);
-  console.log('httpStatusCode: ', error.httpStatusCode);
-  console.log('mensaje: ', error.message);
+  // console.log('\nMensajes error al cliente:');
+  // console.log('========================')
+  // console.log('error: ', error.error);
+  // console.log('httpStatusCode: ', error.httpStatusCode);
+  // console.log('mensaje: ', error.message);
 
   return res.status(400).json(error);
 }

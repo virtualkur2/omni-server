@@ -2,10 +2,10 @@
 import authCtrl from '../../controllers/auth.controller';
 
 const auth = (router) => {
-  router.route('/auth/signin')
+  router.route('/api/auth/signin')
     .post(authCtrl.signin);
 
-  router.route('/auth/signout')
+  router.route('/api/auth/signout')
     .post(authCtrl.signout);
 
   // TODO: Add * for any other request
