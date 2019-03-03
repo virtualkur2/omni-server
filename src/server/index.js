@@ -8,7 +8,6 @@ import routes from './routes';
 import errorHandler from './helpers/error-handler.helper';
 
 const router = express.Router();
-cookieParser(config.cookieSecret);
 const server = () => {
   const app = express();
   app.use(helmet());
@@ -16,7 +15,7 @@ const server = () => {
   app.use(express.urlencoded({
     extended: true
   }));
-  app.use(cookieParser());
+  app.use(cookieParser(config.cookieSecret));
   app.use(routes(router));
   app.use(errorHandler);
   return app;
