@@ -14,7 +14,7 @@ const create = (req, res, next) => {
   });
 }
 
-const read = (next) => {
+const read = (req, res, next) => {
   // hide sensitive data before send to client
   req.profile.hashed_password = undefined;
   req.profile.pepper = undefined;
