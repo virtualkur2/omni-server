@@ -11,6 +11,9 @@ pids
 *.seed
 *.pid.lock
 
+# Dist directory
+dist/
+
 # Dependency directories
 node_modules/
 jspm_packages/
