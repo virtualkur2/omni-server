@@ -19,6 +19,10 @@ const errorHandler = (err, req, res, next) => {
           message = err.errors[errName].message;
           break;
         }
+      } else {
+        name = err.name;
+        httpStatusCode = 403;
+        message = 'No valid request';
       }
       break;
 
@@ -61,8 +65,8 @@ const errorHandler = (err, req, res, next) => {
       httpStatusCode = 500;
       message = 'Session expired';
       break;
-
     case 'EvalError':
+
 
     case 'RangeError':
 

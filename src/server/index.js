@@ -20,6 +20,11 @@ const server = () => {
   }));
   app.use(cookieParser(config.cookieSecret));
   config.env == 'development'? app.use(morgan('dev')) : app.use(morgan('combined'));
+  //
+  // app.use('*',(req,res,next) => {
+  //   console.log(req.body);
+  //   next();
+  // });
   app.use(routes(router));
   app.use(errorHandler);
   app.use(notFoundHandler);

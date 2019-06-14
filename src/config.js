@@ -16,6 +16,22 @@ const config = {
     maxAge: expirationTime,
     secure: process.env.NODE_ENV ? true : false,
     signed: true,
+  },
+  GMAIL: {
+    clientID: process.env.GMAIL_CLIENT_ID,
+    clientSecret: process.env.GMAIL_CLIENT_SECRET,
+    redirectURL: process.env.GMAIL_REDIRECT_URL,
+    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+    emailUser: process.env.GMAIL_USER
+  },
+  MAILGUN: {
+    host: process.env.MAILGUN_HOST,
+    port: process.env.MAILGUN_PORT,
+    secure: process.env.NODE_ENV ? true : false,
+    auth: {
+      user: process.env.MAILGUN_USER,
+      pass: process.env.MAILGUN_PASS
+    }
   }
 }
 

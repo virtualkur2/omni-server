@@ -19,7 +19,8 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     unique: 'This email already exists.',
     match: [/.+\@.+\..+/,'Please fill a valid email address'],
-    required: 'Field \'email\' is required'
+    required: 'Field \'email\' is required',
+    index: true
   },
   hashed_password: {
     type: String,

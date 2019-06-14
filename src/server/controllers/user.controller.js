@@ -1,13 +1,16 @@
 import _ from 'lodash';
+import email from '../helpers/email.helper';
 
 import User from '../models/user.model';
 
 const create = (req, res, next) => {
   const user = new User(req.body);
-  user.save((err, result) => {
+  user.save((err, newUser) => {
     if (err) {
       return next(err);
     }
+    console.log(`newUser.email: ${newUser.email}.`);
+    email.sendActivationEmail(newUser);
     return res.status(201).json({
       message: 'Successfully signed up'
     });
@@ -48,18 +51,24 @@ const remove = (req, res, next) => {
 }
 
 const userById = (req, res, next, id) => {
-  User.findById(id).exec((err, user) => {
-    if(err) {
-      return next(err);
-    }
-    if(!user) {
-      const err = new Error('User not found');
-      err.httpStatusCode = 404;
-      return next(err);
-    }
-    req.profile = user;
-    next();
-  });
+  User.findById(id).exec(findUsrCallback);
 }
 
-export default { create, read, update, remove, userById }
+const userByEmail = (req, res, next, email) => {
+  User.find({email: email}).exec(findUsrCallback);
+}
+
+const findUsrCallback = (err, user) => {
+  if(err) {
+    return next(err);
+  }
+  if(!user) {
+    const err = new Error('User not found');
+    err.httpStatusCode = 404;
+    return next(err);
+  }
+  req.profile = user;
+  next();
+}
+
+export default { create, read, update, remove, userById, userByEmail }

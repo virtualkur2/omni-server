@@ -6,7 +6,6 @@ import server from './server/';
 import dbHelper from './server/helpers/db-connection.helper';
 
 const d = Domain.create();
-
 d.run(() => {
   const app = server();
   console.info('Starting app...');
