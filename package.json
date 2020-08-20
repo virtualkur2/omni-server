@@ -22,7 +22,7 @@
   "author": "Mauricio Contreras Canepa",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "helmet": "^3.21.0",
